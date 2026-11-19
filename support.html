@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Support — InkPass</title>
+  <meta name="theme-color" content="#1A1A1A">
+  <link rel="icon" href="assets/icon-512.png">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html"><img src="assets/wordmark.svg" alt="InkPass"></a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="support.html" aria-current="page">Support</a>
+      <a href="privacy.html">Privacy</a>
+    </nav>
+  </header>
+
+  <main class="doc">
+    <h1>Support</h1>
+    <p class="updated">Questions, problems or feedback — we read every message.</p>
+
+    <h2 id="contact">Contact us</h2>
+    <p>Send us a message and we'll reply to your email, usually within 2 business days. Check the common questions below first — your answer may be there.</p>
+    <form class="support-form" id="support-form" novalidate>
+      <label>What's it about?
+        <select name="topic" id="topic" required>
+          <option value="general">General question</option>
+          <option value="shop">Shop listing or claim</option>
+          <option value="bug">Something isn't working</option>
+          <option value="billing">Premium or billing</option>
+          <option value="delete_account">Delete my account</option>
+          <option value="privacy">Privacy request</option>
+        </select>
+      </label>
+      <label>Name <span class="optional">(optional)</span>
+        <input name="name" type="text" maxlength="100" autocomplete="name">
+      </label>
+      <label>Email
+        <input name="email" type="email" maxlength="254" autocomplete="email" required>
+        <span class="hint" id="email-hint">Use the email on your InkPass account if it's about your account.</span>
+      </label>
+      <label>Message
+        <textarea name="message" rows="6" maxlength="4000" required></textarea>
+      </label>
+      <!-- Honeypot: hidden from people, filled in by bots. -->
+      <div class="hp" aria-hidden="true"><label>Company <input name="company" type="text" tabindex="-1" autocomplete="off"></label></div>
+      <button type="submit">Send message</button>
+      <p class="form-status" id="form-status" role="status"></p>
+    </form>
+
+    <h2>Common questions</h2>
+
+    <h3>I didn't get my sign-up or password reset email.</h3>
+    <p>Check your spam or promotions folder, and make sure you typed your email correctly. Password reset emails contain a 6-digit code to enter in the app. Still nothing? <a href="#contact">Send us a message</a>.</p>
+
+    <h3>How does Match My Style pick shops?</h3>
+    <p>We compare your answers with what each shop says about its own work — on its website, its Instagram and its InkPass card. Closer isn't always better: inside your travel distance, the best fit wins. Each card shows why it matched.</p>
+
+    <h3>A shop's details are wrong.</h3>
+    <p>If it's your shop, claim it in the app ("I'm a tattoo shop") and update the details yourself. If not, <a href="#contact">send us a message</a> with the shop's name, city and what's wrong.</p>
+
+    <h3>How do I claim my shop?</h3>
+    <p>Create an account and choose "I'm a tattoo shop". Find your shop, then prove you run it by adding a short code to your Instagram bio or your website. It's free.</p>
+
+    <h3>How do I cancel Premium?</h3>
+    <p>Premium is billed through Apple or Google. On iPhone: Settings → your name → Subscriptions. On Android: Google Play → profile icon → Payments &amp; subscriptions → Subscriptions. You keep Premium until the end of the period you've paid for.</p>
+
+    <h3>How do I restore a purchase on a new phone?</h3>
+    <p>Sign in to the same InkPass shop account, open Premium and tap "Restore purchases".</p>
+
+    <h2 id="delete">Delete your account</h2>
+    <p>You can delete your InkPass account and its data at any time:</p>
+    <ul>
+      <li><strong>In the app:</strong> Profile → Delete account.</li>
+      <li><strong>On this website:</strong> <a href="#contact" data-topic="delete_account">send us a message</a> with the topic "Delete my account", using the email address on your InkPass account. We'll confirm by email and delete it within 30 days.</li>
+    </ul>
+    <p>Deleting your account removes your profile, photo, favorites, event RSVPs and any shop claim and shop card details. Anonymous quiz records aren't linked to you and are removed automatically after 13 months. If you have Premium, cancel it in your Apple or Google account too — deleting your InkPass account doesn't stop app store billing.</p>
+  </main>
+
+  <footer class="site-footer">
+    <nav>
+      <a href="support.html">Support</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Use</a>
+      <a href="bot.html">InkPassBot</a>
+    </nav>
+    <p>© 2026 Oswald Technologies LLC · <a href="support.html#contact">Contact us</a></p>
+  </footer>
+  <script>
+    (function () {
+      var ENDPOINT = 'https://plqxyqeqbwyzvebxkopr.supabase.co/functions/v1/support-request';
+      var form = document.getElementById('support-form');
+      var status = document.getElementById('form-status');
+      var button = form.querySelector('button');
+
+      // "Delete my account" links pre-pick that topic.
+      document.querySelectorAll('[data-topic]').forEach(function (a) {
+        a.addEventListener('click', function () { form.topic.value = a.getAttribute('data-topic'); });
+      });
+      if (location.hash === '#delete-request') { form.topic.value = 'delete_account'; }
+
+      function show(text, kind) { status.textContent = text; status.className = 'form-status ' + (kind || ''); }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var email = form.email.value.trim();
+        var message = form.message.value.trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { show('Please enter a valid email so we can reply.', 'error'); form.email.focus(); return; }
+        if (!message) { show('Please write a message.', 'error'); form.message.focus(); return; }
+
+        button.disabled = true;
+        show('Sending…');
+        fetch(ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            topic: form.topic.value,
+            name: form.name.value.trim(),
+            email: email,
+            message: message,
+            company: form.company.value
+          })
+        }).then(function (res) {
+          if (res.ok) {
+            form.reset();
+            show("Thanks — your message is on its way. We'll reply to " + email + '.', 'ok');
+          } else if (res.status === 429) {
+            show("We've had a lot of messages from here — please try again in an hour.", 'error');
+          } else {
+            show('Something went wrong sending that. Please check your details and try again.', 'error');
+          }
+        }).catch(function () {
+          show("Couldn't reach us — check your connection and try again.", 'error');
+        }).finally(function () { button.disabled = false; });
+      });
+    })();
+  </script>
+</body>
+</html>

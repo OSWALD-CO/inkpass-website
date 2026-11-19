@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>InkPassBot — InkPass</title>
+  <meta name="theme-color" content="#1A1A1A">
+  <link rel="icon" href="assets/icon-512.png">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html"><img src="assets/wordmark.svg" alt="InkPass"></a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="support.html">Support</a>
+      <a href="privacy.html">Privacy</a>
+    </nav>
+  </header>
+
+  <main class="doc">
+    <h1>InkPassBot</h1>
+    <p class="updated">The web reader behind InkPass shop matching.</p>
+
+    <p>If you saw <code>InkPassBot/0.1 (+https://inkpass.studio/bot)</code> in your website logs, it was us. InkPass is an app that helps people find tattoo shops that fit their style. InkPassBot reads <strong>tattoo shop websites</strong> so the app can tell which shops do fine line, traditional, cover-ups, walk-ins and so on.</p>
+
+    <h2>What it does</h2>
+    <ul>
+      <li>Visits only websites listed for tattoo shops on public business listings.</li>
+      <li>Reads up to 6 public pages per shop, about once a month.</li>
+      <li>Makes no more than 1 request per second to a site, and skips pages over 1 MB.</li>
+      <li>Follows <code>robots.txt</code>.</li>
+      <li>Doesn't fill in forms, log in or read anything behind a login.</li>
+    </ul>
+
+    <h2>What it keeps</h2>
+    <p>Only short tags about the shop, such as "fine line", "walk-ins" or "custom designs", and the shop's website address. It does <strong>not</strong> store copies of your pages, photos or text, and never shows your content in the app.</p>
+
+    <h2>How to block it</h2>
+    <p>Add this to your site's <code>robots.txt</code>:</p>
+<pre>User-agent: InkPassBot
+Disallow: /</pre>
+    <p>InkPassBot also honors rules for its earlier name, <code>InkMeBot</code>, and rules for <code>User-agent: *</code>.</p>
+
+    <h2>Run a tattoo shop?</h2>
+    <p>Claim your shop in the InkPass app for free to set your own styles, walk-in policy and details, instead of relying on what we read. To have your shop's tags removed, or for any other question, use the <a href="support.html#contact">contact form</a>.</p>
+  </main>
+
+  <footer class="site-footer">
+    <nav>
+      <a href="support.html">Support</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Use</a>
+      <a href="bot.html">InkPassBot</a>
+    </nav>
+    <p>© 2026 Oswald Technologies LLC · <a href="support.html#contact">Contact us</a></p>
+  </footer>
+</body>
+</html>
